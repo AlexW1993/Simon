@@ -8,16 +8,17 @@
     tools:context=".MainActivity">
 
     <ImageButton
-        android:id="@+id/buttonRecommencer"
+        android:id="@+id/boutonRecommencer"
         android:layout_width="210dp"
         android:layout_height="125dp"
         android:layout_weight="1"
         android:background="#00BCD4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableButtons"
+        app:layout_constraintTop_toBottomOf="@+id/tableBoutons"
         app:layout_constraintVertical_bias="0.51"
-        app:srcCompat="@mipmap/buttom" />
+        app:srcCompat="@mipmap/buttom"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/recommencer"
@@ -29,22 +30,20 @@
         android:textColor="#D114D1"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonRecommencer"
-        app:layout_constraintStart_toStartOf="@+id/buttonCommencer"
-        app:layout_constraintTop_toTopOf="@+id/buttonRecommencer" />
+        app:layout_constraintBottom_toBottomOf="@+id/boutonRecommencer"
+        app:layout_constraintStart_toStartOf="@+id/boutonCommencer"
+        app:layout_constraintTop_toTopOf="@+id/boutonRecommencer" />
 
     <TextView
         android:id="@+id/meilleurScore"
         android:layout_width="68dp"
         android:layout_height="43dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
         android:background="#FAF6F6"
         android:ems="10"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/time"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/texteScore"
         app:layout_constraintTop_toBottomOf="@+id/score" />
 
@@ -78,18 +77,35 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/buttonCommencer"
+        android:id="@+id/boutonCommencer"
         android:layout_width="210dp"
         android:layout_height="125dp"
         android:layout_weight="1"
         android:background="#00BCD4"
+        android:contentDescription="TODO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableButtons"
+        app:layout_constraintTop_toBottomOf="@+id/tableBoutons"
         app:srcCompat="@mipmap/buttom" />
 
+    <ImageView
+        android:id="@+id/imageX"
+        android:layout_width="410dp"
+        android:layout_height="562dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/boutonRecommencer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/x" />
+
     <TableLayout
-        android:id="@+id/tableButtons"
+        android:id="@+id/tableBoutons"
         android:layout_width="402dp"
         android:layout_height="403dp"
         android:layout_marginTop="30dp"
@@ -103,7 +119,7 @@
             android:layout_weight="1">
 
             <ImageButton
-                android:id="@+id/buttonCarre"
+                android:id="@+id/boutonCarre"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -112,7 +128,7 @@
                 app:srcCompat="@mipmap/carre" />
 
             <ImageButton
-                android:id="@+id/buttonCercle"
+                android:id="@+id/boutonCercle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -127,7 +143,7 @@
             android:layout_weight="1">
 
             <ImageButton
-                android:id="@+id/buttonEtoile"
+                android:id="@+id/boutonEtoile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -136,7 +152,7 @@
                 app:srcCompat="@mipmap/etoile" />
 
             <ImageButton
-                android:id="@+id/buttonTriangle"
+                android:id="@+id/boutonTriangle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -146,22 +162,6 @@
         </TableRow>
 
     </TableLayout>
-
-    <EditText
-        android:id="@+id/time"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginRight="28dp"
-        android:background="#00BCD4"
-        android:ems="10"
-        android:inputType="time"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="" />
 
     <TextView
         android:id="@+id/commencer"
@@ -173,9 +173,9 @@
         android:textColor="#D114D1"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonCommencer"
-        app:layout_constraintStart_toStartOf="@+id/buttonCommencer"
-        app:layout_constraintTop_toTopOf="@+id/buttonCommencer"
+        app:layout_constraintBottom_toBottomOf="@+id/boutonCommencer"
+        app:layout_constraintStart_toStartOf="@+id/boutonCommencer"
+        app:layout_constraintTop_toTopOf="@+id/boutonCommencer"
         app:layout_constraintVertical_bias="0.504" />
 
     <TextView
@@ -183,14 +183,68 @@
         android:layout_width="68dp"
         android:layout_height="43dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
         android:background="#FAF6F6"
         android:ems="10"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/time"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/texteScore"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:layout_width="179dp"
+        android:layout_height="127dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginLeft="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/boutonCommencer"
+        app:layout_constraintTop_toBottomOf="@+id/tableBoutons">
+
+        <RadioButton
+            android:id="@+id/radioFacile"
+            android:layout_width="150sp"
+            android:layout_height="30sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="2dp"
+            android:text="@string/facile"
+            android:textColor="#0410F3"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/radioIntermédiaire"
+            android:layout_width="150sp"
+            android:layout_height="30sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="2dp"
+            android:text="@string/interm_diaire"
+            android:textColor="#F8D803"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/radioDifficile"
+            android:layout_width="150sp"
+            android:layout_height="30sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/difficile"
+            android:textColor="#FD0303"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

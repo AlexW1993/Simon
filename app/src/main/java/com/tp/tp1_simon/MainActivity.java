@@ -6,122 +6,179 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageSwitcher;
-import android.widget.TableLayout;
+import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 
 import com.tp.tp1_simon.modele.Simon;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements Cloneable{
+public class MainActivity extends AppCompatActivity implements Cloneable {
 
+    /**
+     * Declaration des Attributs
+     */
     private Simon jeu;
-    private final ImageButton[][] buttons = new ImageButton[Simon.taille][Simon.taille];
-    private final ImageButton[][] formes = new ImageButton[Simon.taille][Simon.taille];
-    private ArrayList<String> nomButtons = new ArrayList<>();
-    private int k = 0, points = 0;
-    private Integer record = 0;
-    private TextView score, meilleurScore;
-    private ImageButton commencer, recommencer;
-    private TextView texteCommencer, texteRecommencer;
-    private List<Integer> choixCouleur = new ArrayList<Integer>();
-    private int[]choixCouleurAI = new int[4];
 
+    private ImageButton boutonCommencer, boutonRecommencer;
+
+    private TextView score, meilleurScore, texteCommencer, texteRecommencer;
+
+    private final ImageButton[] boutons = new ImageButton[4];
+    private final ImageButton[] formes = new ImageButton[4];
+
+    private ImageView x;
+
+    private RadioButton boutonFacile, boutonIntermédiaire, boutonDifficile;
+
+    private boolean confirmationBoutons = true, finPartie;
+
+    /**
+     * Méthode onCreate
+     * <p>
+     * Perment d'intialiser touts les boutons et textView qui sont
+     * dans activity_main(vue)
+     *
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Intiliaser le jeu
         jeu = new Simon();
-        nomButtons.add("Carre");
-        nomButtons.add("Cercle");
-        nomButtons.add("Etoile");
-        nomButtons.add("Triangle");
-        butonsVisibles();
-        commencer.setOnClickListener(v -> gestionClickCommencer());
-        recommencer.setOnClickListener(v->gestionClickRecommencer());
-    }
-
-    private void butonsVisibles(){
-        recommencer = findViewById(R.id.buttonRecommencer);
-        recommencer.setVisibility(View.INVISIBLE);
-        texteRecommencer = findViewById(R.id.recommencer);
-        texteRecommencer.setVisibility(View.INVISIBLE);
-        commencer = findViewById(R.id.buttonCommencer);
-    }
-
-    private void gestionClick(int i, int j) {
-        if (buttons[i][j] == buttons[0][0]){
-            buttons[i][j].setBackgroundColor(0xFFFF0000);
-            choixCouleur.add(0);
-        } else if (buttons[i][j] == buttons[0][1]){
-            buttons[i][j].setBackgroundColor(0xFF0000FF);
-            choixCouleur.add(1);
-        } else if (buttons[i][j] == buttons[1][0]){
-            buttons[i][j].setBackgroundColor(0xFFFFFF00);
-            choixCouleur.add(2);
-        } else  if (buttons[i][j] == buttons[1][1]){
-            buttons[i][j].setBackgroundColor(0xFF00FF00);
-            choixCouleur.add(3);
-        }
-        attendreEtCacher(i,j);
-        gestionScore();
-    }
-
-    private void gestionScore(){
-        points += 1;
-        record = 0;
-        score.setText(String.valueOf(points));
-        if(points > record){
-            meilleurScore.setText(String.valueOf(points));
-                record = points;
-        } else {
-            meilleurScore.setText(String.valueOf(record));
-        }
-    }
-
-    private void gestionClickCommencer(){
-        sequnceASuivre();
-        for (int i = 0; i < Simon.taille; i++) {
-            for (int j = 0; j < Simon.taille; j++) {
-                String buttonID = "button" + nomButtons.get(k);
-                int resID = getResources().getIdentifier(buttonID, "id", getPackageName());
-                buttons[i][j] = findViewById(resID);
-                formes[i][j] = findViewById(resID);
-
-                int finalI = i;
-                int finalJ = j;
-                buttons[i][j].setOnClickListener(v -> {
-                    gestionClick(finalI, finalJ);
-                });
-                k += 1;
-            }
-        }
-        score = findViewById(R.id.score);
-        meilleurScore = findViewById(R.id.meilleurScore);
-        commencer.setVisibility(View.INVISIBLE);
+        // Bouton de commenzer
+        boutonCommencer = findViewById(R.id.boutonCommencer);
         texteCommencer = findViewById(R.id.commencer);
-        texteCommencer.setVisibility(View.INVISIBLE);
-        recommencer.setVisibility(View.VISIBLE);
-        texteRecommencer.setVisibility(View.VISIBLE);
-    }
+        //Bouton de recommencer
+        boutonRecommencer = findViewById(R.id.boutonRecommencer);
+        texteRecommencer = findViewById(R.id.recommencer);
+        //Textes score et Records
+        score = findViewById(R.id.score);
+        score.setText(String.valueOf(jeu.getPoints()));
+        meilleurScore = findViewById(R.id.meilleurScore);
+        meilleurScore.setText(String.valueOf(jeu.getRecord()));
+        //noms des boutons
+        jeu.ajouterBouttons("Carre");
+        jeu.ajouterBouttons("Cercle");
+        jeu.ajouterBouttons("Etoile");
+        jeu.ajouterBouttons("Triangle");
 
-    private void gestionClickRecommencer(){
-        points = 0;
-        score.setText(String.valueOf(points));
-        for (int i = 0; i < Simon.taille ; i++) {
-            for (int j = 0; j < Simon.taille ; j++) {
-                buttons[i][j].setBackgroundColor(0xFF00BCD4);
-            }
+        //image x
+        x = findViewById(R.id.imageX);
+
+        //Boutons de difficulté
+        boutonFacile = findViewById(R.id.radioFacile);
+        boutonIntermédiaire = findViewById(R.id.radioIntermédiaire);
+        boutonDifficile = findViewById(R.id.radioDifficile);
+
+        //Boutons forms
+        for (int i = 0; i < 4; i++) {
+            String buttonID = "bouton" + jeu.getNomButtons().get(i);
+            int resID = getResources().getIdentifier(buttonID, "id", getPackageName());
+            boutons[i] = findViewById(resID);
+            formes[i] = findViewById(resID);
+            int finalI = i;
+            boutons[i].setOnClickListener(v -> {
+                gestionClick(finalI);
+            });
         }
-        sequnceASuivre();
-        choixCouleur.clear();
+
+        boutonCommencer.setOnClickListener(v -> gestionClickCommencer());
+        boutonRecommencer.setOnClickListener(v -> gestionClickRecommencer());
+        boutonsInvisibles();
     }
 
-    private void attendreEtCacher(int i, int j){
-        new CountDownTimer(500,500){
+    private void gestionClickCommencer() {
+        boutonCommencer.setVisibility(View.INVISIBLE);
+        texteCommencer.setVisibility(View.INVISIBLE);
+        boutonRecommencer.setVisibility(View.VISIBLE);
+        texteRecommencer.setVisibility(View.VISIBLE);
+        validerDifficulté();
+        activationBoutons();
+        systèmeJeu();
+    }
 
+    private void activationBoutons(){
+        if (Boolean.compare(confirmationBoutons,true)== 0){
+            for (int i = 0; i < 4; i++) {
+                boutons[i].setVisibility(View.VISIBLE);
+            }
+            confirmationBoutons = false;
+            boutonFacile.setVisibility(View.INVISIBLE);
+            boutonIntermédiaire.setVisibility(View.INVISIBLE);
+            boutonDifficile.setVisibility(View.INVISIBLE);
+            x.setVisibility(View.INVISIBLE);
+        } else {
+            for (int i = 0; i < 4; i++) {
+                boutons[i].setVisibility(View.INVISIBLE);
+            }
+            confirmationBoutons = true;
+            x.setVisibility(View.VISIBLE);
+            boutonFacile.setVisibility(View.VISIBLE);
+            boutonIntermédiaire.setVisibility(View.VISIBLE);
+            boutonDifficile.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void validerDifficulté(){
+        if(boutonFacile.isChecked()==true){
+            jeu.ajouterDifficulté(1500);
+        } else if (boutonIntermédiaire.isChecked() == true) {
+            jeu.ajouterDifficulté(750);
+        } else if (boutonDifficile.isChecked() == true) {
+            jeu.ajouterDifficulté(500);
+        } else {
+            jeu.ajouterDifficulté(1500);
+        }
+    }
+
+    private void systèmeJeu(){
+        finPartie = false;
+        jeu.choixCouleurIA();
+        délaiSéquence();
+    }
+
+    private void boutonsInvisibles() {
+        boutonRecommencer.setVisibility(View.INVISIBLE);
+        texteRecommencer.setVisibility(View.INVISIBLE);
+        for (int i = 0; i < 4; i++) {
+            boutons[i].setVisibility(View.INVISIBLE);
+        }
+        x.setVisibility(View.INVISIBLE);
+    }
+
+    private void gestionClick(int i) {
+        if (boutons[i] == boutons[0]) {
+            boutons[i].setBackgroundColor(0xFFFF0000);
+            jeu.ajouterCouleur(0);
+            attendreEtCacher(i);
+            gestionTourJoueur();
+        } else if (boutons[i] == boutons[1]) {
+            boutons[i].setBackgroundColor(0xFF0000FF);
+            jeu.ajouterCouleur(1);
+            attendreEtCacher(i);
+            gestionTourJoueur();
+        } else if (boutons[i] == boutons[2]) {
+            boutons[i].setBackgroundColor(0xFFFFFF00);
+            jeu.ajouterCouleur(2);
+            attendreEtCacher(i);
+            gestionTourJoueur();
+        } else if (boutons[i] == boutons[3]) {
+            boutons[i].setBackgroundColor(0xFF00FF00);
+            jeu.ajouterCouleur(3);
+            attendreEtCacher(i);
+            gestionTourJoueur();
+        }
+    }
+
+    private void délaiSéquence(){
+        for (int i = 0; i < 4; i++) {
+            boutons[i].setEnabled(false);
+        }
+        new CountDownTimer(1000,1000){
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -130,32 +187,101 @@ public class MainActivity extends AppCompatActivity implements Cloneable{
 
             @Override
             public void onFinish() {
-                        buttons[i][j].setBackgroundColor(0xFF00BCD4);
+                attendreEtCacherSequence();
             }
         }.start();
     }
 
-    private void sequnceASuivre(){
-
-        for (int i = 0; i < 4; i++) {
-            choixCouleurAI[i] = (int) Math.floor((Math.random()*4));
-            if(choixCouleurAI[i] == 0) {
-                buttons[0][0] = findViewById(R.id.buttonCarre);
-                buttons[0][0].setBackgroundColor(0xFFFF0000);
-                attendreEtCacher(0,0);
-            } else if(choixCouleurAI[i]==1){
-                buttons[0][1] = findViewById(R.id.buttonCercle);
-                buttons[0][1].setBackgroundColor(0xFF0000FF);
-                attendreEtCacher(0,1);
-            } else if(choixCouleurAI[i]==2) {
-                buttons[1][0] = findViewById(R.id.buttonEtoile);
-                buttons[1][0].setBackgroundColor(0xFFFFFF00);
-                attendreEtCacher(1,0);
-            }else if(choixCouleurAI[i]==3) {
-                buttons[1][1] = findViewById(R.id.buttonTriangle);
-                buttons[1][1].setBackgroundColor(0xFF00FF00);
-                attendreEtCacher(1,1);
+    private void gestionTourJoueur(){
+        if(jeu.comparerSequenceChoix(jeu.getChoixCouleur().size()-1) == true){
+            if(jeu.getChoixCouleur().size() == jeu.getChoixCouleurIA().size()){
+                gestionScore();
+                prochainePartie();
             }
+        } else {
+            activationBoutons();
+            finPartie = true;
         }
+
+    }
+
+    private void gestionScore() {
+        jeu.ajouterPoints();
+        score.setText(String.valueOf(jeu.getPoints()));
+        if (jeu.getPoints() > jeu.getRecord()) {
+            meilleurScore.setText(String.valueOf(jeu.getPoints()));
+            jeu.setRecord(jeu.getPoints());
+        }
+    }
+
+    private void prochainePartie(){
+        jeu.reinitialiserChoixCouleur();
+        systèmeJeu();
+    }
+
+    private void gestionClickRecommencer() {
+        jeu.reinitialiserPoints();
+        score.setText(String.valueOf(jeu.getPoints()));
+        for (int i = 0; i < 4; i++) {
+            boutons[i].setBackgroundColor(0xFF00BCD4);
+        }
+        jeu.reinitialiserChoixCouleur();
+        jeu.reinitialiserChoixCouleurIA();
+        validerDifficulté();
+        if(finPartie == true){
+            activationBoutons();
+        }
+        systèmeJeu();
+    }
+
+    private void attendreEtCacherSequence() {
+        new CountDownTimer(jeu.getDifficulté() * jeu.getChoixCouleurIA().size(), jeu.getDifficulté() / 2 ) {
+            int i = 0;
+            boolean couleurSimon = false;
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if (couleurSimon == false) {
+                    if (jeu.getChoixCouleurIA().get(i) == 0) {
+                        boutons[0].setBackgroundColor(0xFFFF0000);
+                    } else if (jeu.getChoixCouleurIA().get(i) == 1) {
+                        boutons[1].setBackgroundColor(0xFF0000FF);
+                    } else if (jeu.getChoixCouleurIA().get(i) == 2) {
+                        boutons[2].setBackgroundColor(0xFFFFFF00);
+                    } else if (jeu.getChoixCouleurIA().get(i) == 3) {
+                        boutons[3].setBackgroundColor(0xFF00FF00);
+                    }
+                    couleurSimon = true;
+                } else {
+                    boutons[jeu.getChoixCouleurIA().get(i)].setBackgroundColor(0xFF00BCD4);
+                    couleurSimon = false;
+                    if (i < jeu.getChoixCouleurIA().size() - 1) {
+                        i++;
+                    }
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                for (int i = 0; i < 4; i++) {
+                    boutons[i].setEnabled(true );
+                }
+            }
+        }.start();
+    }
+
+    private void attendreEtCacher(int i) {
+        new CountDownTimer(500,500 ) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                boutons[i].setBackgroundColor(0xFF00BCD4);
+            }
+        }.start();
     }
 }

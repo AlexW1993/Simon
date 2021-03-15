@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="recommencer">CONTINUER</string>
+    <string name="recommencer">RESTART</string>
     <string name="meilleur_score"> BEST SCORE :</string>
     <string name="score">SCORE :</string>
     <string name="commencer">START</string>
+    <string name="facile">EASY</string>
+    <string name="interm_diaire">NORMAL</string>
+    <string name="difficile">HARD</string>
 </resources>
