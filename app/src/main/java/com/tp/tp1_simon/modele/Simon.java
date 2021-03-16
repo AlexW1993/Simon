@@ -19,13 +19,11 @@ public class Simon {
      * Constructeur du jeu Simon.
      */
     public Simon() {
-
         nomBouttons = new ArrayList<>();
         points = 0;
         record = 0;
         choixCouleur = new ArrayList<Integer>();
         choixCouleurIA = new ArrayList<Integer>();
-
     }
 
     /**
@@ -37,8 +35,23 @@ public class Simon {
         return points;
     }
 
+    /**
+     * Accesseurs de la difficulté du jeu
+     *
+     * @return la difficulté du jeu en 3 choix (500 = difficile.
+     * 750 = Intermédiaire et 1000 = facile).
+     */
     public int getDifficulté() {
         return difficulté;
+    }
+
+    /**
+     * Mutateur de record
+     *
+     * @param i, la difficulté du jeu.
+     */
+    public void setDifficulté(int i) {
+        difficulté = i;
     }
 
     /**
@@ -66,7 +79,6 @@ public class Simon {
      * @return Le nom du chaque bouton du jeu.
      */
     public List<String> getNomButtons() {
-
         return nomBouttons;
     }
 
@@ -76,7 +88,6 @@ public class Simon {
      * @return Les couleurs choisies par le joueur.
      */
     public List<Integer> getChoixCouleur() {
-
         return choixCouleur;
     }
 
@@ -86,65 +97,58 @@ public class Simon {
      * @return Les couleurs choisies par l'IA.
      */
     public List<Integer> getChoixCouleurIA() {
-
         return choixCouleurIA;
     }
 
     /**
-     * Permit d'ajouter 1 points à chaque fois que
+     * La méthode permet d'ajouter 1 points à chaque fois que
      * le joueur click sur la bonne couleur
      */
     public void ajouterPoints() {
-
         this.points += 1;
     }
 
     /**
-     * Permit d'ajouter reinitialiser les points à 0
+     * La méthode permet d'ajouter réinitialiser les points à 0
      */
-    public void reinitialiserPoints() {
-
+    public void réinitialiserPoints() {
         this.points = 0;
     }
 
     /**
-     * Permet ajouter des noms aux boutons
+     * La méthode permet ajouter des noms aux boutons
      *
      * @param forme, le nom du bouton.
      */
     public void ajouterBouttons(String forme) {
-
         this.nomBouttons.add(forme);
     }
 
     /**
-     * Permet ajouter la couleur que le joueur a choisit
+     * La méthode permet ajouter la couleur que le joueur a choisit
      *
      * @param couleur, la couleur choisit.
      */
     public void ajouterCouleur(int couleur) {
-
         this.choixCouleur.add(couleur);
     }
 
     /**
-     * Permet effacer la liste des couleurs du joueur
+     * La méthode permet effacer la liste des couleurs du joueur
      */
-    public void reinitialiserChoixCouleur() {
-
+    public void réinitialiserChoixCouleur() {
         this.choixCouleur.clear();
     }
 
     /**
-     * Permet effacer la liste des couleurs de l'IA
+     * La méthode permet effacer la liste des couleurs de l'IA
      */
-    public void reinitialiserChoixCouleurIA() {
-
+    public void réinitialiserChoixCouleurIA() {
         this.choixCouleurIA.clear();
     }
 
     /**
-     * Permet ajouter la couleur / couleurs que l'IA a choisit
+     * La méthode permet ajouter la couleur / couleurs que l'IA a choisit
      */
     public void choixCouleurIA() {
         Random random = new Random();
@@ -152,12 +156,12 @@ public class Simon {
     }
 
     /**
-     * Permet de comparer le choix entre le joueur et l'IA
+     * La méthode permet de comparer le choix entre le joueur et l'IA
      *
      * @return true si les choix sont égals ou false si les choix
      * ne sont pas égals
      */
-    public boolean comparerSequenceChoix(int i) {
+    public boolean comparerSéquenceChoix(int i) {
         boolean confirmation = true;
 
         if (choixCouleurIA.get(i) == choixCouleur.get(i)) {
@@ -165,12 +169,6 @@ public class Simon {
         } else {
             confirmation = false;
         }
-
         return confirmation;
     }
-
-    public void ajouterDifficulté(int i) {
-            difficulté = i;
-    }
-
 }

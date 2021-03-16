@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
 
     /**
      * Méthode onCreate
-     * <p>
+     *
      * Perment d'intialiser touts les boutons et textView qui sont
      * dans activity_main(vue)
      *
@@ -91,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
         boutonsInvisibles();
     }
 
+    /**
+     * La méthode permet changer  la visibilité des certaines boutons
+     * (boutonCommencer et boutonRecommencer avec ses textes), valider
+     * la difficulté du jeu, activer certains boutons et ejecuter
+     * la logique du jeu.
+     */
     private void gestionClickCommencer() {
         boutonCommencer.setVisibility(View.INVISIBLE);
         texteCommencer.setVisibility(View.INVISIBLE);
@@ -101,6 +107,42 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
         systèmeJeu();
     }
 
+    /**
+     * La méthode permet de réinitialiser le jeu.
+     */
+    private void gestionClickRecommencer() {
+        jeu.réinitialiserPoints();
+        score.setText(String.valueOf(jeu.getPoints()));
+        for (int i = 0; i < 4; i++) {
+            boutons[i].setBackgroundColor(0xFF00BCD4);
+        }
+        jeu.réinitialiserChoixCouleur();
+        jeu.réinitialiserChoixCouleurIA();
+        validerDifficulté();
+        if(finPartie == true){
+            activationBoutons();
+        }
+        systèmeJeu();
+    }
+
+    /**
+     * La méthode permet de rendre invisible le boutonRecommencer,son texte
+     * et l'image X avant que le joueur commence le jeu.
+     */
+    private void boutonsInvisibles() {
+        boutonRecommencer.setVisibility(View.INVISIBLE);
+        texteRecommencer.setVisibility(View.INVISIBLE);
+        for (int i = 0; i < 4; i++) {
+            boutons[i].setVisibility(View.INVISIBLE);
+        }
+        x.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * La méthode permet l'activation ou desactivation des boutons (boutonFacile,
+     * boutonIntermédiaire, boutonDifficile, boutons generals et l'image X quand
+     * le joueur perd la partie.
+     */
     private void activationBoutons(){
         if (Boolean.compare(confirmationBoutons,true)== 0){
             for (int i = 0; i < 4; i++) {
@@ -123,57 +165,35 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
         }
     }
 
+    /**
+     * La méthode permet valider le choix de la difficulté du joueur.
+     */
     private void validerDifficulté(){
         if(boutonFacile.isChecked()==true){
-            jeu.ajouterDifficulté(1500);
+            jeu.setDifficulté(1500);
         } else if (boutonIntermédiaire.isChecked() == true) {
-            jeu.ajouterDifficulté(750);
+            jeu.setDifficulté(750);
         } else if (boutonDifficile.isChecked() == true) {
-            jeu.ajouterDifficulté(500);
+            jeu.setDifficulté(500);
         } else {
-            jeu.ajouterDifficulté(1500);
+            jeu.setDifficulté(1500);
         }
     }
 
+    /**
+     * La méthode permet de faire la séquence du couleur de l'IA.
+     */
     private void systèmeJeu(){
         finPartie = false;
         jeu.choixCouleurIA();
         délaiSéquence();
     }
 
-    private void boutonsInvisibles() {
-        boutonRecommencer.setVisibility(View.INVISIBLE);
-        texteRecommencer.setVisibility(View.INVISIBLE);
-        for (int i = 0; i < 4; i++) {
-            boutons[i].setVisibility(View.INVISIBLE);
-        }
-        x.setVisibility(View.INVISIBLE);
-    }
-
-    private void gestionClick(int i) {
-        if (boutons[i] == boutons[0]) {
-            boutons[i].setBackgroundColor(0xFFFF0000);
-            jeu.ajouterCouleur(0);
-            attendreEtCacher(i);
-            gestionTourJoueur();
-        } else if (boutons[i] == boutons[1]) {
-            boutons[i].setBackgroundColor(0xFF0000FF);
-            jeu.ajouterCouleur(1);
-            attendreEtCacher(i);
-            gestionTourJoueur();
-        } else if (boutons[i] == boutons[2]) {
-            boutons[i].setBackgroundColor(0xFFFFFF00);
-            jeu.ajouterCouleur(2);
-            attendreEtCacher(i);
-            gestionTourJoueur();
-        } else if (boutons[i] == boutons[3]) {
-            boutons[i].setBackgroundColor(0xFF00FF00);
-            jeu.ajouterCouleur(3);
-            attendreEtCacher(i);
-            gestionTourJoueur();
-        }
-    }
-
+    /**
+     * La méthode permet de faire une délai de temps entre le dernièr tour et
+     * le nouveau. Aussi les boutons seront desactivés pendant que la nouveau séquence de l'IA
+     * s'affiche.
+     */
     private void délaiSéquence(){
         for (int i = 0; i < 4; i++) {
             boutons[i].setEnabled(false);
@@ -192,48 +212,10 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
         }.start();
     }
 
-    private void gestionTourJoueur(){
-        if(jeu.comparerSequenceChoix(jeu.getChoixCouleur().size()-1) == true){
-            if(jeu.getChoixCouleur().size() == jeu.getChoixCouleurIA().size()){
-                gestionScore();
-                prochainePartie();
-            }
-        } else {
-            activationBoutons();
-            finPartie = true;
-        }
-
-    }
-
-    private void gestionScore() {
-        jeu.ajouterPoints();
-        score.setText(String.valueOf(jeu.getPoints()));
-        if (jeu.getPoints() > jeu.getRecord()) {
-            meilleurScore.setText(String.valueOf(jeu.getPoints()));
-            jeu.setRecord(jeu.getPoints());
-        }
-    }
-
-    private void prochainePartie(){
-        jeu.reinitialiserChoixCouleur();
-        systèmeJeu();
-    }
-
-    private void gestionClickRecommencer() {
-        jeu.reinitialiserPoints();
-        score.setText(String.valueOf(jeu.getPoints()));
-        for (int i = 0; i < 4; i++) {
-            boutons[i].setBackgroundColor(0xFF00BCD4);
-        }
-        jeu.reinitialiserChoixCouleur();
-        jeu.reinitialiserChoixCouleurIA();
-        validerDifficulté();
-        if(finPartie == true){
-            activationBoutons();
-        }
-        systèmeJeu();
-    }
-
+    /**
+     * La méthode permet afficher la séquence de l'IA dans une intervalle du temps.
+     * Aussi les boutons seront activés
+     */
     private void attendreEtCacherSequence() {
         new CountDownTimer(jeu.getDifficulté() * jeu.getChoixCouleurIA().size(), jeu.getDifficulté() / 2 ) {
             int i = 0;
@@ -270,6 +252,42 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
         }.start();
     }
 
+    /**
+     * La méthode permet changer la couleur du bouton sélectioner et
+     * faire la logique de séquence entre la séquence du joueur et l'IA
+     *
+     * @param i, le code du bouton qui a été sélectionè.
+     */
+    private void gestionClick(int i) {
+        if (boutons[i] == boutons[0]) {
+            boutons[i].setBackgroundColor(0xFFFF0000);
+            jeu.ajouterCouleur(0);
+            attendreEtCacher(i);
+            gestionTourJoueur();
+        } else if (boutons[i] == boutons[1]) {
+            boutons[i].setBackgroundColor(0xFF0000FF);
+            jeu.ajouterCouleur(1);
+            attendreEtCacher(i);
+            gestionTourJoueur();
+        } else if (boutons[i] == boutons[2]) {
+            boutons[i].setBackgroundColor(0xFFFFFF00);
+            jeu.ajouterCouleur(2);
+            attendreEtCacher(i);
+            gestionTourJoueur();
+        } else if (boutons[i] == boutons[3]) {
+            boutons[i].setBackgroundColor(0xFF00FF00);
+            jeu.ajouterCouleur(3);
+            attendreEtCacher(i);
+            gestionTourJoueur();
+        }
+    }
+
+    /**
+     * La méthode permet de retourner la couleur du background du fond de l'application
+     * après que le bouton que le jouer a sélectioné est allumé.
+     *
+     * @param i, le code du bouton qui a été sélectionè.
+     */
     private void attendreEtCacher(int i) {
         new CountDownTimer(500,500 ) {
 
@@ -283,5 +301,44 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
                 boutons[i].setBackgroundColor(0xFF00BCD4);
             }
         }.start();
+    }
+
+    /**
+     * La méthode permet de vérifier las séquence du joueur avec la séquence de l'IA
+     * pour savoir si la partie continue ou pas.
+     */
+    private void gestionTourJoueur(){
+        if(jeu.comparerSéquenceChoix(jeu.getChoixCouleur().size()-1) == true){
+            if(jeu.getChoixCouleur().size() == jeu.getChoixCouleurIA().size()){
+                gestionScore();
+                prochainePartie();
+            }
+        } else {
+            activationBoutons();
+            finPartie = true;
+        }
+
+    }
+
+    /**
+     * La méthode permet de préparer le joueur pour une nouvelle partie.
+     */
+    private void prochainePartie(){
+        jeu.réinitialiserChoixCouleur();
+        systèmeJeu();
+    }
+
+    /**
+     * La méthode permet de ajouter 1 points chaque fois que le joueur
+     * fait une séquence correct. Aussi, si les points sont plus haut que l'actuel record,
+     * le record sera modifier..
+     */
+    private void gestionScore() {
+        jeu.ajouterPoints();
+        score.setText(String.valueOf(jeu.getPoints()));
+        if (jeu.getPoints() > jeu.getRecord()) {
+            meilleurScore.setText(String.valueOf(jeu.getPoints()));
+            jeu.setRecord(jeu.getPoints());
+        }
     }
 }
