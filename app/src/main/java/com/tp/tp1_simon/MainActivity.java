@@ -2,6 +2,7 @@ package com.tp.tp1_simon;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
 
     private boolean confirmationBoutons = true, finPartie;
 
+    private MediaPlayer sonner1, sonner2, sonner3, sonner4, séquenceCorrecte, soundFinPartie;
+
     /**
      * Méthode onCreate
      *
@@ -65,15 +68,12 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
         jeu.ajouterBouttons("Cercle");
         jeu.ajouterBouttons("Etoile");
         jeu.ajouterBouttons("Triangle");
-
         //image x
         x = findViewById(R.id.imageX);
-
         //Boutons de difficulté
         boutonFacile = findViewById(R.id.radioFacile);
         boutonIntermédiaire = findViewById(R.id.radioIntermédiaire);
         boutonDifficile = findViewById(R.id.radioDifficile);
-
         //Boutons forms
         for (int i = 0; i < 4; i++) {
             String buttonID = "bouton" + jeu.getNomButtons().get(i);
@@ -85,6 +85,13 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
                 gestionClick(finalI);
             });
         }
+        //Des sons
+        sonner1 = MediaPlayer.create(this,R.raw.mario);
+        sonner2 = MediaPlayer.create(this,R.raw.mariosalto);
+        sonner3 = MediaPlayer.create(this,R.raw.pacman);
+        sonner4 = MediaPlayer.create(this,R.raw.zelda);
+        séquenceCorrecte = MediaPlayer.create(this,R.raw.secret);
+        soundFinPartie = MediaPlayer.create(this,R.raw.mariokart);
 
         boutonCommencer.setOnClickListener(v -> gestionClickCommencer());
         boutonRecommencer.setOnClickListener(v -> gestionClickRecommencer());
@@ -149,9 +156,16 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
                 boutons[i].setVisibility(View.VISIBLE);
             }
             confirmationBoutons = false;
-            boutonFacile.setVisibility(View.INVISIBLE);
-            boutonIntermédiaire.setVisibility(View.INVISIBLE);
-            boutonDifficile.setVisibility(View.INVISIBLE);
+            if(jeu.getDifficulté() == 2500){
+                boutonIntermédiaire.setVisibility(View.INVISIBLE);
+                boutonDifficile.setVisibility(View.INVISIBLE);
+            } else if(jeu.getDifficulté() == 2000){
+                boutonFacile.setVisibility(View.INVISIBLE);
+                boutonDifficile.setVisibility(View.INVISIBLE);
+            } if(jeu.getDifficulté() == 1500){
+                boutonFacile.setVisibility(View.INVISIBLE);
+                boutonIntermédiaire.setVisibility(View.INVISIBLE);
+            }
             x.setVisibility(View.INVISIBLE);
         } else {
             for (int i = 0; i < 4; i++) {
@@ -159,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
             }
             confirmationBoutons = true;
             x.setVisibility(View.VISIBLE);
+            soundFinPartie.start();
             boutonFacile.setVisibility(View.VISIBLE);
             boutonIntermédiaire.setVisibility(View.VISIBLE);
             boutonDifficile.setVisibility(View.VISIBLE);
@@ -170,13 +185,13 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
      */
     private void validerDifficulté(){
         if(boutonFacile.isChecked()==true){
-            jeu.setDifficulté(1500);
+            jeu.setDifficulté(2500);
         } else if (boutonIntermédiaire.isChecked() == true) {
-            jeu.setDifficulté(750);
+            jeu.setDifficulté(2000);
         } else if (boutonDifficile.isChecked() == true) {
-            jeu.setDifficulté(500);
-        } else {
             jeu.setDifficulté(1500);
+        } else {
+            jeu.setDifficulté(2500);
         }
     }
 
@@ -198,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
         for (int i = 0; i < 4; i++) {
             boutons[i].setEnabled(false);
         }
-        new CountDownTimer(1000,1000){
+        new CountDownTimer(1500,1500){
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -226,12 +241,16 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
                 if (couleurSimon == false) {
                     if (jeu.getChoixCouleurIA().get(i) == 0) {
                         boutons[0].setBackgroundColor(0xFFFF0000);
+                        sonner1.start();
                     } else if (jeu.getChoixCouleurIA().get(i) == 1) {
                         boutons[1].setBackgroundColor(0xFF0000FF);
+                        sonner2.start();
                     } else if (jeu.getChoixCouleurIA().get(i) == 2) {
                         boutons[2].setBackgroundColor(0xFFFFFF00);
+                        sonner3.start();
                     } else if (jeu.getChoixCouleurIA().get(i) == 3) {
                         boutons[3].setBackgroundColor(0xFF00FF00);
+                        sonner4.start();
                     }
                     couleurSimon = true;
                 } else {
@@ -261,21 +280,25 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
     private void gestionClick(int i) {
         if (boutons[i] == boutons[0]) {
             boutons[i].setBackgroundColor(0xFFFF0000);
+            sonner1.start();
             jeu.ajouterCouleur(0);
             attendreEtCacher(i);
             gestionTourJoueur();
         } else if (boutons[i] == boutons[1]) {
             boutons[i].setBackgroundColor(0xFF0000FF);
+            sonner2.start();
             jeu.ajouterCouleur(1);
             attendreEtCacher(i);
             gestionTourJoueur();
         } else if (boutons[i] == boutons[2]) {
             boutons[i].setBackgroundColor(0xFFFFFF00);
+            sonner3.start();
             jeu.ajouterCouleur(2);
             attendreEtCacher(i);
             gestionTourJoueur();
         } else if (boutons[i] == boutons[3]) {
             boutons[i].setBackgroundColor(0xFF00FF00);
+            sonner4.start();
             jeu.ajouterCouleur(3);
             attendreEtCacher(i);
             gestionTourJoueur();
@@ -310,6 +333,7 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
     private void gestionTourJoueur(){
         if(jeu.comparerSéquenceChoix(jeu.getChoixCouleur().size()-1) == true){
             if(jeu.getChoixCouleur().size() == jeu.getChoixCouleurIA().size()){
+                séquenceCorrecte.start();
                 gestionScore();
                 prochainePartie();
             }

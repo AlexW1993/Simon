@@ -38,8 +38,8 @@ public class Simon {
     /**
      * Accesseurs de la difficulté du jeu
      *
-     * @return la difficulté du jeu en 3 choix (500 = difficile.
-     * 750 = Intermédiaire et 1000 = facile).
+     * @return la difficulté du jeu en 3 choix (1500 = difficile.
+     * 2000 = Intermédiaire et 2500 = facile).
      */
     public int getDifficulté() {
         return difficulté;
