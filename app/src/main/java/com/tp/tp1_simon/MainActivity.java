@@ -156,13 +156,13 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
                 boutons[i].setVisibility(View.VISIBLE);
             }
             confirmationBoutons = false;
-            if(jeu.getDifficulté() == 2500){
+            if(jeu.getDifficulté() == 2000){
                 boutonIntermédiaire.setVisibility(View.INVISIBLE);
                 boutonDifficile.setVisibility(View.INVISIBLE);
-            } else if(jeu.getDifficulté() == 2000){
+            } else if(jeu.getDifficulté() == 1500){
                 boutonFacile.setVisibility(View.INVISIBLE);
                 boutonDifficile.setVisibility(View.INVISIBLE);
-            } if(jeu.getDifficulté() == 1500){
+            } if(jeu.getDifficulté() == 1000){
                 boutonFacile.setVisibility(View.INVISIBLE);
                 boutonIntermédiaire.setVisibility(View.INVISIBLE);
             }
@@ -185,13 +185,13 @@ public class MainActivity extends AppCompatActivity implements Cloneable {
      */
     private void validerDifficulté(){
         if(boutonFacile.isChecked()==true){
-            jeu.setDifficulté(2500);
-        } else if (boutonIntermédiaire.isChecked() == true) {
             jeu.setDifficulté(2000);
-        } else if (boutonDifficile.isChecked() == true) {
+        } else if (boutonIntermédiaire.isChecked() == true) {
             jeu.setDifficulté(1500);
+        } else if (boutonDifficile.isChecked() == true) {
+            jeu.setDifficulté(1000);
         } else {
-            jeu.setDifficulté(2500);
+            jeu.setDifficulté(2000);
         }
     }
 
